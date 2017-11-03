@@ -2,10 +2,10 @@
 library(data.table)
 library(tidyverse)
 library(quanteda)
-
+setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
 # Unzip the dataset
-unzip("Coursera-Swiftkey.zip", exdir = "data", overwrite = FALSE, setTimes = FALSE)
-path.to.data <- "C:/Users/Sarah/Documents/R/DataScienceCapstone/data/final/en_US/"
+#unzip("Coursera-Swiftkey.zip", exdir = "data", overwrite = FALSE, setTimes = FALSE)
+path.to.data <- paste0(getwd(), "/data/final/en_US/")
 
 # Create a connection to each English dataset (Twitter, news, and blogs)
 blogs.con <- file(paste0(path.to.data, "en_US.blogs.txt"), "rb")
@@ -45,20 +45,21 @@ twitter.con <- file(paste0(path.to.data, "en_US.twitter.txt"), "rb")
 # }
 
 # Sample 25% of the texts and save to a data table
-sample <- data.table()
+# Sample 25% of the texts and save to a data table
+all.data <- data.table()
 while (length(line <- readLines(blogs.con, n = 20, skipNul = TRUE, encoding = "UTF-8")) > 0) {
-  if (rbinom(1, 1, 0.1)) sample <- rbind(sample, line)
+  if(rbinom(1, 1, 0.5)) all.data <- rbind(all.data, line)
 }
 
 while (length(line <- readLines(news.con, n = 20, skipNul = TRUE, encoding = "UTF-8")) > 0) {
-  if (rbinom(1, 1, 0.1)) sample <- rbind(sample, line)
+  if(rbinom(1, 1, 0.5)) all.data <- rbind(all.data, line)
 }
 
 while (length(line <- readLines(twitter.con, n = 20, skipNul = TRUE, encoding = "UTF-8")) > 0) {
-  if (rbinom(1, 1, 0.1)) sample <- rbind(sample, line)
+  if(rbinom(1, 1, 0.5)) all.data <- rbind(all.data, line)
 }
 
-write_csv(sample, path = "C:/Users/Sarah/Documents/R/DataScienceCapstone/textSample.csv", col_names = FALSE, append = FALSE)
+write_csv(all.data, path = paste0(getwd(), "/allText.csv"), col_names = FALSE, append = FALSE)
 
 
 # Close file connections
