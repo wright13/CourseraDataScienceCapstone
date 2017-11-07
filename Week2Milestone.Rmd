@@ -1,0 +1,30 @@
+---
+title: "Week 2 Milestone"
+author: "Sarah E. Wright"
+date: "November 3, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(quanteda)
+library(data.table)
+```
+
+## Summary of Raw Data
+
+```{r cars}
+summary(cars)
+```
+
+## Exploratory Data Analysis
+
+### Word Frequencies
+
+```{r include = FALSE}
+
+```
+### 
+
+## Prediction Algorith and App
