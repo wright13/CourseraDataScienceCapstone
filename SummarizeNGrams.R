@@ -6,7 +6,8 @@ library(data.table)
 library(tidyverse)
 library(quanteda)
 
-setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
+#setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
+setwd("C:/Users/sewright/Documents/R/Classes/CourseraDataScienceCapstone")
 
 CountNGrams <- function(n.gram.table, token) {
   #n.grams.count <- as.data.table(n.gram.list)

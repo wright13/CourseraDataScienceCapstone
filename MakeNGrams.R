@@ -6,7 +6,9 @@ library(data.table)
 library(tidyverse)
 library(quanteda)
 library(readtext)
-setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
+#setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
+setwd("C:/Users/sewright/Documents/R/Classes/CourseraDataScienceCapstone")
+
 path.to.data <- paste0(getwd(), "/data/final/en_US/")
 text.files <- paste0(path.to.data, dir(path = path.to.data, pattern = "sample"))
 

@@ -2,7 +2,8 @@ library(tidyverse)
 library(quanteda)
 library(data.table)
 
-setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
+#setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
+setwd("C:/Users/sewright/Documents/R/Classes/CourseraDataScienceCapstone")
 
 # Read in 1- through 6-grams
 one.grams <- fread("one_grams_count.txt")

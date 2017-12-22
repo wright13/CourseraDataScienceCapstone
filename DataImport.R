@@ -4,7 +4,8 @@ library(tidyverse)
 library(quanteda)
 library(readr)
 library(R.utils)
-setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
+#setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
+setwd("C:/Users/sewright/Documents/R/Classes/CourseraDataScienceCapstone")
 
 # Unzip the dataset
 #unzip("Coursera-Swiftkey.zip", exdir = "data", overwrite = FALSE, setTimes = FALSE)
