@@ -26,7 +26,7 @@ blogs.n <- countLines(paste0(path.to.data, "en_US.blogs.txt"))
 news.n <- countLines(paste0(path.to.data, "en_US.news.txt"))
 twitter.n <- countLines(paste0(path.to.data, "en_US.twitter.txt"))
 
-p <- 0.1    # Proportion of text to sample
+p <- 0.05    # Proportion of text to sample
 lines.n <- 1    #Number of lines to sample at a time
 
 # Set seed
