@@ -25,8 +25,8 @@ blogs.n <- countLines(paste0(path.to.data, "en_US.blogs.txt"))
 news.n <- countLines(paste0(path.to.data, "en_US.news.txt"))
 twitter.n <- countLines(paste0(path.to.data, "en_US.twitter.txt"))
 
-# Set proportion of texts to sample
-p <- 0.25
+p <- 0.1    # Proportion of text to sample
+lines.n <- 1    #Number of lines to sample at a time
 
 # Set seed
 set.seed(110317)
@@ -36,19 +36,19 @@ all.data <- data.table()
 
 sample.line <- rbinom(blogs.n, 1, p)
 for (i in 1:blogs.n) {
-    line <- readLines(blogs.con, n = 20, skipNul = TRUE, encoding = "UTF-8")
+    line <- readLines(blogs.con, n = lines.n, skipNul = TRUE, encoding = "UTF-8")
     if (sample.line[i]) writeLines(line, con = blogs.sample)
 }
 
 sample.line <- rbinom(news.n, 1, p)
 for (i in 1:news.n) {
-    line <- readLines(news.con, n = 20, skipNul = TRUE, encoding = "UTF-8")
+    line <- readLines(news.con, n = lines.n, skipNul = TRUE, encoding = "UTF-8")
     if (sample.line[i]) writeLines(line, con = news.sample)
 }
 
 sample.line <- rbinom(twitter.n, 1, p)
 for (i in 1:twitter.n) {
-    line <- readLines(twitter.con, n = 20, skipNul = TRUE, encoding = "UTF-8")
+    line <- readLines(twitter.con, n = lines.n, skipNul = TRUE, encoding = "UTF-8")
     if (sample.line[i]) writeLines(line, con = twitter.sample)
 }
 
