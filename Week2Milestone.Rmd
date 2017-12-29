@@ -1,7 +1,7 @@
 ---
 title: "Week 2 Milestone"
 author: "Sarah E. Wright"
-date: "November 3, 2017"
+date: "Dec 29, 2017"
 output: html_document
 ---
 
@@ -14,17 +14,33 @@ library(data.table)
 
 ## Summary of Raw Data
 
-```{r cars}
-summary(cars)
+```{r summary}
+# Line count for each file
+
+# Word count for each file
+
+# Table of file, size, line count, and word count
+
 ```
 
-## Exploratory Data Analysis
+## Data Cleaning and Processing
 
-### Word Frequencies
+### Tokenization
+
+### Making n-grams
+
+### Cleaning up n-grams
 
 ```{r include = FALSE}
+# Plot showing size of object vs % of words covered
+
+# Plots of n-gram frequencies
 
 ```
-### 
+ 
 
-## Prediction Algorith and App
+## Prediction Algorithm and App
+
+### Algorithm
+
+### Shiny App
