@@ -10,6 +10,19 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(quanteda)
 library(data.table)
+source("DataImport.R")
+source("MakeNGrams.R")
+source("CleanupNGrams.R")
+source("SummarizeNGrams.R")
+```
+
+## Import data and make, clean up, and summarize n-grams
+```{r dataprocessing}
+work.dir <- "C:/Users/sewright/Documents/R/Classes/CourseraDataScienceCapstone"
+line.counts <- DataImport(work.dir)
+MakeNGrams(work.dir)
+CleanupNGrams(work.dir)
+SummarizeNGrams(work.dir)
 ```
 
 ## Summary of Raw Data

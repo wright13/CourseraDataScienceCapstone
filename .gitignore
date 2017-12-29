@@ -1,7 +1,9 @@
 .Rhistory
 /data
 *.zip
-.RData
+*.RData
 *.csv
 *.txt
 *.pdf
+*.Rproj.user
+*.Rproj
