@@ -65,6 +65,6 @@ DataImport <- function(working.dir) {
     close(news.sample)
     close(twitter.sample)
     
-    n.lines <- data.frame(dataset = c("blogs", "news", "twitter"), n.lines = c(blogs.n, news.n, twitter.n))
+    n.lines <- data.frame(dataset = c("blogs", "news", "twitter"), n.lines = c(blogs.n, news.n, twitter.n), percent.sample = c(p, p, p))
     return(n.lines)
 }

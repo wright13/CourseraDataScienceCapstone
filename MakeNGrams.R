@@ -1,12 +1,22 @@
+CountNGrams <- function(n.gram.table, token) {
+    #n.grams.count <- as.data.table(n.gram.list)
+    n.gram.table[, count := .N, by = token]
+    setorder(n.gram.table, -count)
+    n.gram.table <- unique(n.gram.table)
+    n.gram.table[, cumulative.count := cumsum(count)]
+    n.gram.table[, cumulative.proportion := cumulative.count/sum(count)]
+    return(n.gram.table)
+}
+
 MakeNGrams <- function(working.dir) {
     # Clear the environment
     #rm(list = ls())
     
     # Load packages and set working directory
-    library(data.table)
-    library(tidyverse)
-    library(quanteda)
-    library(readtext)
+    require(data.table)
+    require(tidyverse)
+    require(quanteda)
+    require(readtext)
     #setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
     setwd(working.dir)
     
@@ -25,19 +35,38 @@ MakeNGrams <- function(working.dir) {
     
     makeTokens <- function(input, n) {
       n.grams <- tokens(input, what = "word", remove_numbers = TRUE, remove_punct = TRUE, remove_symbols = TRUE, remove_url = TRUE, remove_twitter = FALSE, ngrams = n) %>%
-        toLower() %>%
+        tokens_tolower() %>%
         unlist(use.names = FALSE) %>%
         as.data.table()
     }
     
     one.grams <- makeTokens(sentences, 1)
+    names(one.grams) <- "one.gram"
     two.grams <- makeTokens(sentences, 2)
+    names(two.grams) <- "two.gram"
     three.grams <- makeTokens(sentences, 3)
+    names(three.grams) <- "three.gram"
     four.grams <- makeTokens(sentences, 4)
+    names(four.grams) <- "four.gram"
     
-    fwrite(one.grams, file = paste0(getwd(), "/", "one_grams.txt"), append = FALSE)
-    fwrite(two.grams, file = paste0(getwd(), "/", "two_grams.txt"), append = FALSE)
-    fwrite(three.grams, file = paste0(getwd(), "/", "three_grams.txt"), append = FALSE)
-    fwrite(four.grams, file = paste0(getwd(), "/", "four_grams.txt"), append = FALSE)
+    one.grams.count <- CountNGrams(one.grams, "one.gram")
+    rm(one.grams)
     
+    two.grams.count <- CountNGrams(two.grams, "two.gram")
+    rm(two.grams)
+    
+    three.grams.count <- CountNGrams(three.grams, "three.gram")
+    rm(three.grams)
+    
+    four.grams.count <- CountNGrams(four.grams, "four.gram")
+    rm(four.grams)
+    
+    # Write data frame of n-grams, counts, and percentages
+    fwrite(one.grams.count, file = paste0(getwd(), "/", "one_grams.txt"), append = FALSE)
+    fwrite(two.grams.count, file = paste0(getwd(), "/", "two_grams.txt"), append = FALSE)
+    fwrite(three.grams.count, file = paste0(getwd(), "/", "three_grams.txt"), append = FALSE)
+    fwrite(four.grams.count, file = paste0(getwd(), "/", "four_grams.txt"), append = FALSE)
+    
+    # Clear the environment
+    rm(list = ls())
 }   

@@ -9,10 +9,10 @@ CleanupNGrams <- function(working.dir) {
     setwd(working.dir)
     
     # Read in 1- through 4-grams
-    one.grams <- fread("one_grams_count.txt")
-    two.grams <- fread("two_grams_count.txt")
-    three.grams <- fread("three_grams_count.txt")
-    four.grams <- fread("four_grams_count.txt")
+    one.grams <- fread("one_grams.txt")
+    two.grams <- fread("two_grams.txt")
+    three.grams <- fread("three_grams.txt")
+    four.grams <- fread("four_grams.txt")
     
     # Calculate total occurrences of all n-grams
     n.one.grams <- sum(one.grams$count)
