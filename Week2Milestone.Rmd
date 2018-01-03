@@ -11,36 +11,45 @@ library(tidyverse)
 library(quanteda)
 library(data.table)
 library(plotly)
+library(readtext)
+library(RColorBrewer)
 source("DataImport.R")
 source("MakeNGrams.R")
-
+working.dir <- "C:/Users/sewright/Documents/R/Classes/CourseraDataScienceCapstone"
+setwd(working.dir)
 ```
 
-## Import data and make, clean up, and summarize n-grams
+## Data Import and Processing
+
+Because the original data set is so large (see below), I only imported a 5% sample for the purpose of exploratory data analysis. Using the `quanteda` package, I created a corpus from my sample and generated some basic summary plots and statistics.
 ```{r dataprocessing}
-work.dir <- "C:/Users/sewright/Documents/R/Classes/CourseraDataScienceCapstone"
-line.counts <- DataImport(work.dir)
-MakeNGrams(work.dir)
-```
-
-## Summary of Raw Data
-
-```{r summary, echo = FALSE}
+line.counts <- DataImport(working.dir)
+MakeNGrams(working.dir)
 # Line count for each file
 line.counts
-# Word count for each file
-
-# Table of file, size, line count, and word count
-
 ```
 
-## Data Cleaning and Processing
+## Exploratory Data Analysis
+To get a sense of which tokens appear most frequently in the corpus, I created a document-feature matrix using `quanteda`. I excluded "stop words" (common function words such as "a," "the," "I," "we," etc.) since I was more interested in getting a sense of which topics and themes were most common.
+The fifty most common words in the corpus and their frequencies are as follows:
+```{r summary, echo = FALSE}
 
-### Tokenization
+# Import data
+path.to.data <- paste0(getwd(), "/data/final/en_US/")
+text.files <- paste0(path.to.data, dir(path = path.to.data, pattern = "sample"))
 
-### Making n-grams
+# Create a corpus using the quanteda package
+corpus.all <- corpus(readtext(text.files))
+corpus.summary <- summary(corpus.all)
 
-### Cleaning up n-grams
+# List top 50 words in the corpus and create a wordcloud of words that appear more than 1000 times
+my.dfm <- dfm(corpus.all, remove = stopwords("english"), remove_punct = TRUE, remove_numbers = TRUE)
+topfeatures(my.dfm, 50)/sum(corpus.summary$Tokens)
+```
+Below is a word cloud of words that appear more than 1000 times in the corpus:
+```{r}
+textplot_wordcloud(my.dfm, scale = c(2.5, .2), min.freq = 1000, colors = brewer.pal(8, "Dark2"), random.order = FALSE)
+```
 
 ```{r include = FALSE}
 # Plot showing size of object vs % of words covered
@@ -89,5 +98,7 @@ plot_ly(data = acc.data, x = ~percent) %>%
 ## Prediction Algorithm and App
 
 ### Algorithm
+I plan to use the interpolated Kneser-Ney algorithm. This algorithm calculates word probabilities based not only on how frequently a word completes n-grams, but also the number of unique n-grams the word completes. This ensures that a word that typically only occurs as part of a common phrase is not assigned a high probability in other contexts. Word probabilities are calculated using all n-gram orders; higher-order n-gram counts have more weight when they are large, whereas small, higher-order n-gram counts may be weighted less than large, lower-order n-gram counts. 
 
 ### Shiny App
+The Shiny app will have two modes: autocompletion and text generation. The autocompletion mode will prompt the user to begin typing a sentence or phrase. When the user presses the "predict" button, the app will predict the next word in the sequence. The text generation mode will prompt the user for a short phrase and the number of sentences they wish to generate. Using the input phrase as a "seed," the app will predict the next word and then continue feeding the last three words of generated text back into the prediction algorithm until the requested number of sentences have been produced.
