@@ -67,6 +67,12 @@ MakeNGrams <- function(working.dir) {
     fwrite(three.grams.count, file = paste0(getwd(), "/", "three_grams.txt"), append = FALSE)
     fwrite(four.grams.count, file = paste0(getwd(), "/", "four_grams.txt"), append = FALSE)
     
+    # Write data frame of n-grams and counts into a single file
+    fwrite(select(one.grams.count, one.gram, count), file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
+    fwrite(select(two.grams.count, two.gram, count), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+    fwrite(select(three.grams.count, three.gram, count), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+    fwrite(select(four.grams.count, four.gram, count), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+    
     # Clear the environment
     rm(list = ls())
 }   

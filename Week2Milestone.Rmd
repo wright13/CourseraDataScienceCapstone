@@ -5,7 +5,7 @@ date: "Dec 29, 2017"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(quanteda)
@@ -22,7 +22,7 @@ setwd(working.dir)
 ## Data Import and Processing
 
 Because the original data set is so large (see below), I only imported a 5% sample for the purpose of exploratory data analysis. Using the `quanteda` package, I created a corpus from my sample and generated some basic summary plots and statistics.
-```{r dataprocessing}
+```{r dataprocessing, echo = FALSE, message = FALSE}
 line.counts <- DataImport(working.dir)
 MakeNGrams(working.dir)
 # Line count for each file
@@ -32,7 +32,7 @@ line.counts
 ## Exploratory Data Analysis
 To get a sense of which tokens appear most frequently in the corpus, I created a document-feature matrix using `quanteda`. I excluded "stop words" (common function words such as "a," "the," "I," "we," etc.) since I was more interested in getting a sense of which topics and themes were most common.
 The fifty most common words in the corpus and their frequencies are as follows:
-```{r summary, echo = FALSE}
+```{r summary, message = FALSE}
 
 # Import data
 path.to.data <- paste0(getwd(), "/data/final/en_US/")
@@ -42,7 +42,7 @@ text.files <- paste0(path.to.data, dir(path = path.to.data, pattern = "sample"))
 corpus.all <- corpus(readtext(text.files))
 corpus.summary <- summary(corpus.all)
 
-# List top 50 words in the corpus and create a wordcloud of words that appear more than 1000 times
+# List top 50 words in the corpus
 my.dfm <- dfm(corpus.all, remove = stopwords("english"), remove_punct = TRUE, remove_numbers = TRUE)
 topfeatures(my.dfm, 50)/sum(corpus.summary$Tokens)
 ```
@@ -51,7 +51,7 @@ Below is a word cloud of words that appear more than 1000 times in the corpus:
 textplot_wordcloud(my.dfm, scale = c(2.5, .2), min.freq = 1000, colors = brewer.pal(8, "Dark2"), random.order = FALSE)
 ```
 
-```{r include = FALSE}
+```{r include = FALSE, message = FALSE}
 # Plot showing size of object vs % of words covered
 
 # Read in 1- through 4-grams
@@ -84,7 +84,7 @@ for (pct in seq(0.1, 0.9, 0.1)) {
 names(acc.data) <- c("proportion", "one.grams.size", "two.grams.size", "three.grams.size", "four.grams.size")
 acc.data[,2:5] <- acc.data[,2:5]/1000000000
 
-plot_ly(data = acc.data, x = ~percent) %>%
+plot_ly(data = acc.data, x = ~proportion) %>%
     add_trace(y = ~one.grams.size, name = "one-grams size (Gb)") %>%
     add_trace(y = ~two.grams.size, name = "two-grams size (Gb)") %>%
     add_trace(y = ~three.grams.size, name = "three-grams size (Gb)") %>%
