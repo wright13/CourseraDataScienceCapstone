@@ -15,9 +15,9 @@ DataImport <- function(working.dir) {
     path.to.data <- paste0(getwd(), "/data/final/en_US/")
     
     # Create a read connection to each English dataset (Twitter, news, and blogs)
-    blogs.con <- file(paste0(path.to.data, "en_US.blogs.txt"), "rb")
-    news.con <- file(paste0(path.to.data, "en_US.news.txt"), "rb")
-    twitter.con <- file(paste0(path.to.data, "en_US.twitter.txt"), "rb")
+    blogs.con <- file(paste0(path.to.data, "en_US.blogs.txt"), "rb", encoding = "UTF-8")
+    news.con <- file(paste0(path.to.data, "en_US.news.txt"), "rb", encoding = "UTF-8")
+    twitter.con <- file(paste0(path.to.data, "en_US.twitter.txt"), "rb", encoding = "UTF-8")
     
     # Create a write connection to sample files
     blogs.sample <- file(paste0(path.to.data, "blogs_sample.txt"), "w")

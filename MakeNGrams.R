@@ -41,34 +41,34 @@ MakeNGrams <- function(working.dir) {
     
     print("Making unigrams")
     one.grams <- makeTokens(sentences, 1)
-    names(one.grams) <- "one.gram"
+    names(one.grams) <- "token"
     print("Making bigrams")
     two.grams <- makeTokens(sentences, 2)
-    names(two.grams) <- "two.gram"
+    names(two.grams) <- "token"
     print("Making trigrams")
     three.grams <- makeTokens(sentences, 3)
-    names(three.grams) <- "three.gram"
+    names(three.grams) <- "token"
     print("Making tetragrams")
     four.grams <- makeTokens(sentences, 4)
-    names(four.grams) <- "four.gram"
+    names(four.grams) <- "token"
     print("Making five-grams")
     five.grams <- makeTokens(sentences, 5)
-    names(five.grams) <- "five.gram"    
+    names(five.grams) <- "token"    
     
     
-    one.grams.count <- CountNGrams(one.grams, "one.gram", 1)
+    one.grams.count <- CountNGrams(one.grams, "token", 1)
     rm(one.grams)
     
-    two.grams.count <- CountNGrams(two.grams, "two.gram", 2)
+    two.grams.count <- CountNGrams(two.grams, "token", 2)
     rm(two.grams)
     
-    three.grams.count <- CountNGrams(three.grams, "three.gram", 3)
+    three.grams.count <- CountNGrams(three.grams, "token", 3)
     rm(three.grams)
     
-    four.grams.count <- CountNGrams(four.grams, "four.gram", 4)
+    four.grams.count <- CountNGrams(four.grams, "token", 4)
     rm(four.grams)
     
-    five.grams.count <- CountNGrams(five.grams, "five.gram", 5)
+    five.grams.count <- CountNGrams(five.grams, "token", 5)
     rm(five.grams)
     
     # Write data frame of n-grams, counts, and percentages
@@ -78,14 +78,27 @@ MakeNGrams <- function(working.dir) {
     fwrite(three.grams.count, file = paste0(getwd(), "/", "three_grams.txt"), append = FALSE)
     fwrite(four.grams.count, file = paste0(getwd(), "/", "four_grams.txt"), append = FALSE)
     fwrite(five.grams.count, file = paste0(getwd(), "/", "five_grams.txt"), append = FALSE)
-
-    # Write data frame of n-grams and counts into a single file
-    fwrite(select(one.grams.count[count > 5000], one.gram, count, n), file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
-    fwrite(select(two.grams.count[count > 5], two.gram, count, n), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
-    fwrite(select(three.grams.count[count > 5], three.gram, count, n), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
-    fwrite(select(four.grams.count[count > 5], four.gram, count, n), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
-    fwrite(select(five.grams.count[count > 5], five.gram, count, n), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
-    
     # Clear the environment
     # rm(list = ls())
-}   
+}
+
+ConsolidateNGrams <- function() {
+  # Read n-grams in from individual text files
+  one.grams.count <- fread("one_grams.txt")
+  names(one.grams.count) <- c("token", "count", "n")
+  two.grams.count <- fread("two_grams.txt")
+  names(two.grams.count) <- c("token", "count", "n")
+  three.grams.count <- fread("three_grams.txt")
+  names(three.grams.count) <- c("token", "count", "n")
+  four.grams.count <- fread("four_grams.txt")
+  names(four.grams.count) <- c("token", "count", "n")
+  five.grams.count <- fread("five_grams.txt")
+  names(five.grams.count) <- c("token", "count", "n")
+  
+  # Write data frame of n-grams and counts into a single file
+  fwrite(one.grams.count[count > 40], file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
+  fwrite(two.grams.count[count > 5], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+  fwrite(three.grams.count[count > 5], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+  fwrite(four.grams.count[count > 5], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+  fwrite(five.grams.count[count > 5], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)  
+}
