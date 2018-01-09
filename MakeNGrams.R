@@ -1,8 +1,9 @@
-CountNGrams <- function(n.gram.table, token) {
+CountNGrams <- function(n.gram.table, token, n.words) {
     #n.grams.count <- as.data.table(n.gram.list)
     n.gram.table[, count := .N, by = token]
     setorder(n.gram.table, -count)
     n.gram.table <- unique(n.gram.table)
+    n.gram.table[, n := n.words]
     return(n.gram.table)
 }
 
@@ -55,35 +56,36 @@ MakeNGrams <- function(working.dir) {
     names(five.grams) <- "five.gram"    
     
     
-    one.grams.count <- CountNGrams(one.grams, "one.gram")
+    one.grams.count <- CountNGrams(one.grams, "one.gram", 1)
     rm(one.grams)
     
-    two.grams.count <- CountNGrams(two.grams, "two.gram")
+    two.grams.count <- CountNGrams(two.grams, "two.gram", 2)
     rm(two.grams)
     
-    three.grams.count <- CountNGrams(three.grams, "three.gram")
+    three.grams.count <- CountNGrams(three.grams, "three.gram", 3)
     rm(three.grams)
     
-    four.grams.count <- CountNGrams(four.grams, "four.gram")
+    four.grams.count <- CountNGrams(four.grams, "four.gram", 4)
     rm(four.grams)
     
-    five.grams.count <- CountNGrams(five.grams, "five.gram")
+    five.grams.count <- CountNGrams(five.grams, "five.gram", 5)
     rm(five.grams)
     
     # Write data frame of n-grams, counts, and percentages
+    # getwd()
     fwrite(one.grams.count, file = paste0(getwd(), "/", "one_grams.txt"), append = FALSE)
     fwrite(two.grams.count, file = paste0(getwd(), "/", "two_grams.txt"), append = FALSE)
     fwrite(three.grams.count, file = paste0(getwd(), "/", "three_grams.txt"), append = FALSE)
     fwrite(four.grams.count, file = paste0(getwd(), "/", "four_grams.txt"), append = FALSE)
     fwrite(five.grams.count, file = paste0(getwd(), "/", "five_grams.txt"), append = FALSE)
-    
+
     # Write data frame of n-grams and counts into a single file
-    fwrite(select(one.grams.count, one.gram, count), file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
-    fwrite(select(two.grams.count, two.gram, count), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
-    fwrite(select(three.grams.count, three.gram, count), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
-    fwrite(select(four.grams.count, four.gram, count), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
-    fwrite(select(five.grams.count, five.gram, count), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+    fwrite(select(one.grams.count[count > 5000], one.gram, count, n), file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
+    fwrite(select(two.grams.count[count > 5], two.gram, count, n), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+    fwrite(select(three.grams.count[count > 5], three.gram, count, n), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+    fwrite(select(four.grams.count[count > 5], four.gram, count, n), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+    fwrite(select(five.grams.count[count > 5], five.gram, count, n), file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
     
     # Clear the environment
-    rm(list = ls())
+    # rm(list = ls())
 }   
