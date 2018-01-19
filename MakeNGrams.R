@@ -1,11 +1,42 @@
-CountNGrams <- function(n.gram.table, token, n.words) {
-    #n.grams.count <- as.data.table(n.gram.list)
-    n.gram.table[, count := .N, by = token]
-    setorder(n.gram.table, -count)
-    n.gram.table <- unique(n.gram.table)
-    n.gram.table[, n := n.words]
-    return(n.gram.table)
-}
+# CountNGrams <- function(n.gram.table, token, n.words) {
+#     #n.grams.count <- as.data.table(n.gram.list)
+#     n.gram.table[, count := .N, by = token]
+#     setorder(n.gram.table, -count)
+#     n.gram.table <- unique(n.gram.table)
+#     n.gram.table[, n := n.words]
+#     return(n.gram.table)
+# }
+# Load packages
+library(data.table)
+library(tidyverse)
+library(quanteda)
+library(readr)
+library(R.utils)
+library(readtext)
+
+# Read texts into a invididual corpuses. readtext() works for twitter and blogs, and read_file() works for news.
+blogs.path <- paste0(getwd(), "/data/final/en_US/en_US.blogs.txt")
+twitter.path <- paste0(getwd(), "/data/final/en_US/en_US.twitter.txt")
+news.path <- paste0(getwd(), "/data/final/en_US/en_US.news.txt")
+
+blogs.corpus <- corpus(readtext(blogs.path))
+twitter.corpus <- corpus(readtext(twitter.path))
+news.corpus <- corpus(read_file(news.path))
+
+# Clear the doc_id variable in the blogs and twitter corpuses so that we can combine them with the news corpus, which does not have a doc_id field
+docvars(blogs.corpus, "doc_id") <- data.frame() 
+docvars(twitter.corpus, "doc_id") <- data.frame()
+
+# Combine all three corpuses into one
+corpus.all <- blogs.corpus + twitter.corpus + news.corpus
+rm(blogs.corpus, twitter.corpus, news.corpus)
+
+# Tokenize the corpus into 2 - 5grams
+tokens.all <- tokens(corpus.all, what = "word", remove_numbers = TRUE, remove_punct = FALSE, remove_symbols = TRUE, remove_url = TRUE, remove_twitter = TRUE, ngrams = 2:5) %>%
+    tokens_tolower() %>%
+    unlist(use.names = FALSE) %>%
+    as.data.table()
+
 
 MakeNGrams <- function(working.dir) {
     # Clear the environment
@@ -20,7 +51,7 @@ MakeNGrams <- function(working.dir) {
     setwd(working.dir)
     
     path.to.data <- paste0(getwd(), "/data/final/en_US/")
-    text.files <- paste0(path.to.data, dir(path = path.to.data, pattern = "sample"))
+    text.files <- paste0(path.to.data, dir(path = path.to.data, pattern = "en_US"))
     
     # Create a corpus using the quanteda package
     corpus.all <- corpus(readtext(text.files))
