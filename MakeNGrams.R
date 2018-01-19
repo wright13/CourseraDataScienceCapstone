@@ -25,20 +25,19 @@ MakeNGrams <- function(working.dir) {
     # Create a corpus using the quanteda package
     corpus.all <- corpus(readtext(text.files))
     
-    # Tokenize the corpus
-    
     # Split into sentences first
     sentences <- tokens(corpus.all, what = "sentence", remove_numbers = TRUE, remove_punct = TRUE, remove_twitter = TRUE, remove_url = TRUE, remove_symbols = TRUE)
     sentences <- paste("#s#", unlist(sentences, use.names = FALSE), "#e#")
     rm(corpus.all)
     
     makeTokens <- function(input, n) {
-      n.grams <- tokens(input, what = "word", remove_numbers = TRUE, remove_punct = TRUE, remove_symbols = TRUE, remove_url = TRUE, remove_twitter = FALSE, ngrams = n) %>%
-        tokens_tolower() %>%
-        unlist(use.names = FALSE) %>%
-        as.data.table()
+        n.grams <- tokens(input, what = "word", remove_numbers = TRUE, remove_punct = TRUE, remove_symbols = TRUE, remove_url = TRUE, remove_twitter = FALSE, ngrams = n) %>%
+            tokens_tolower() %>%
+            unlist(use.names = FALSE) %>%
+            as.data.table()
     }
     
+    # Create n-grams
     print("Making unigrams")
     one.grams <- makeTokens(sentences, 1)
     names(one.grams) <- "token"
@@ -78,28 +77,30 @@ MakeNGrams <- function(working.dir) {
     fwrite(three.grams.count, file = paste0(getwd(), "/", "three_grams.txt"), append = FALSE)
     fwrite(four.grams.count, file = paste0(getwd(), "/", "four_grams.txt"), append = FALSE)
     fwrite(five.grams.count, file = paste0(getwd(), "/", "five_grams.txt"), append = FALSE)
-
+    
     # Clear the environment
     # rm(list = ls())
 }
 
 ConsolidateNGrams <- function() {
-  # Read n-grams in from individual text files
-  one.grams.count <- fread("one_grams.txt")
-  names(one.grams.count) <- c("token", "count", "n")
-  two.grams.count <- fread("two_grams.txt")
-  names(two.grams.count) <- c("token", "count", "n")
-  three.grams.count <- fread("three_grams.txt")
-  names(three.grams.count) <- c("token", "count", "n")
-  four.grams.count <- fread("four_grams.txt")
-  names(four.grams.count) <- c("token", "count", "n")
-  five.grams.count <- fread("five_grams.txt")
-  names(five.grams.count) <- c("token", "count", "n")
-  
-  # Write data frame of n-grams and counts into a single file
-  fwrite(one.grams.count[count > 40], file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
-  fwrite(two.grams.count[count > 5], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
-  fwrite(three.grams.count[count > 5], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
-  fwrite(four.grams.count[count > 5], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
-  fwrite(five.grams.count[count > 5], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)  
+    setwd("C:/Users/sewright/Documents/R/Classes/CourseraDataScienceCapstone/StupidBackoff")
+    
+    # Read n-grams in from individual text files
+    one.grams.count <- fread("one_grams.txt")
+    names(one.grams.count) <- c("token", "count", "n")
+    two.grams.count <- fread("two_grams.txt")
+    names(two.grams.count) <- c("token", "count", "n")
+    three.grams.count <- fread("three_grams.txt")
+    names(three.grams.count) <- c("token", "count", "n")
+    four.grams.count <- fread("four_grams.txt")
+    names(four.grams.count) <- c("token", "count", "n")
+    five.grams.count <- fread("five_grams.txt")
+    names(five.grams.count) <- c("token", "count", "n")
+    
+    # Write data frame of n-grams and counts into a single file
+    fwrite(one.grams.count[count > 1], file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
+    fwrite(two.grams.count[count > 1], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+    fwrite(three.grams.count[count > 1], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+    fwrite(four.grams.count[count > 1], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)
+    #fwrite(five.grams.count[count > 1], file = paste0(getwd(), "/", "n_grams.txt"), append = TRUE)  
 }
