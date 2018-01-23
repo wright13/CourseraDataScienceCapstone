@@ -9,3 +9,5 @@
 *.Rproj.user
 *.Rproj
 .Rproj.user
+*.html
+/rsconnect
