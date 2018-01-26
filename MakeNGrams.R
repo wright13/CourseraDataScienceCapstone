@@ -9,6 +9,7 @@ library(readtext)
 # Read texts into invididual corpus. readtext() works for twitter and blogs, and read_file() works for news.
 train.paths <- paste0(getwd(), "/data/final/en_US/train_", 1:10, ".txt")
 all.tokens <- data.table()
+profanity.filter <- unlist(fread("profanity_list_for_filter.txt", header = FALSE))
 
 for (file.path in train.paths) {
     print(file.path)
@@ -24,6 +25,7 @@ for (file.path in train.paths) {
 all.tokens <- all.tokens[, list(count = sum(count)), by = list(n.gram)]
 all.tokens <- all.tokens[, list(prefix = sub("_[^_]+$", "", n.gram), word = sub("^([^_]+_)+", "", n.gram), count)]
 
+all.tokens <- all.tokens[!(word %in% profanity.filter)]
 fwrite(all.tokens, file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
 
 
