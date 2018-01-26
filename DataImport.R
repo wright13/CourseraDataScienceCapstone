@@ -7,7 +7,6 @@ library(R.utils)
 
 #setwd("M:/STAFF/WrightS/Classes/Data Science Capstone")
 
-
 # Unzip the dataset
 #unzip("Coursera-Swiftkey.zip", exdir = "data", overwrite = FALSE, setTimes = FALSE)
 path.to.data <- paste0(getwd(), "/data/final/en_US/")

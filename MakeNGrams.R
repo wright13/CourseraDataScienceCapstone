@@ -5,6 +5,7 @@ library(quanteda)
 library(readr)
 library(R.utils)
 library(readtext)
+library(sqldf)
 
 # Read texts into invididual corpus. readtext() works for twitter and blogs, and read_file() works for news.
 train.paths <- paste0(getwd(), "/data/final/en_US/train_", 1:10, ".txt")
@@ -28,5 +29,7 @@ all.tokens <- all.tokens[, list(prefix = sub("_[^_]+$", "", n.gram), word = sub(
 all.tokens <- all.tokens[!(word %in% profanity.filter)]
 rm(profanity.filter)
 fwrite(all.tokens, file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
-
-
+filtered.tokens <- all.tokens[, prefix.count := sum(count), prefix]
+filtered.tokens <- setorder(filtered.tokens, prefix, -count)[, index := seq_len(.N), by = prefix][index <= 3]
+filtered.tokens <- filtered.tokens[prefix.count > 1]
+fwrite(filtered.tokens, file = paste0(getwd(), "/", "filtered_n_grams.txt"), append = FALSE)
