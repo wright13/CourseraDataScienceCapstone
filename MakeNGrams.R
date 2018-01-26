@@ -26,6 +26,7 @@ all.tokens <- all.tokens[, list(count = sum(count)), by = list(n.gram)]
 all.tokens <- all.tokens[, list(prefix = sub("_[^_]+$", "", n.gram), word = sub("^([^_]+_)+", "", n.gram), count)]
 
 all.tokens <- all.tokens[!(word %in% profanity.filter)]
+rm(profanity.filter)
 fwrite(all.tokens, file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
 
 
