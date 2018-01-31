@@ -31,6 +31,9 @@ rm(profanity.filter)
 fwrite(all.tokens, file = paste0(getwd(), "/", "n_grams.txt"), append = FALSE)
 
 filtered.tokens <- all.tokens[, prefix.count := sum(count), prefix]
+filtered.tokens[prefix.count <= 2, c("prefix")] <- "<UNK>"
+filtered.tokens <- all.tokens[, prefix.count := sum(count), prefix]
 filtered.tokens <- setorder(filtered.tokens, prefix, -count)[, index := seq_len(.N), by = prefix][index <= 3]
-filtered.tokens <- filtered.tokens[prefix.count > 1]
-fwrite(filtered.tokens, file = paste0(getwd(), "/", "filtered_n_grams.txt"), append = FALSE)
+filtered.tokens <- filtered.tokens[prefix.count > 2]
+filtered.tokens[, prob := count / prefix.count]
+fwrite(filtered.tokens[, c("prefix", "word", "prob")], file = paste0(getwd(), "/", "filtered_n_grams.txt"), append = FALSE)
